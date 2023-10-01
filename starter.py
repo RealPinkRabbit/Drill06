@@ -78,17 +78,17 @@ def reset_line():
 # 캐릭터 위치를 다음 프레임 위치로 갱신하는 함수
 def reset_character():
     global x, y, line_x, line_y, line_x_index, line_y_index
-    x = line_x[line_x_index]
-    y = line_y[line_y_index]
     line_x_index += 1
     line_y_index += 1
-
+    x = line_x[line_x_index]
+    y = line_y[line_y_index]
 
 # 메인함수
 while running:
     clear_canvas()
     handle_events()
 
+    # 그리기
     TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
     if (len(hand_x) == 0):
         pass
@@ -100,7 +100,6 @@ while running:
             reset_line()
         else: # 아직 도달하지 못했을 경우
             reset_character()
-
     character.clip_draw(character_frame * 100, 100 * character_dir, 100, 100, x, TUK_HEIGHT - 1 - y)
     hand_arrow.draw(cursor_x, cursor_y)
 
@@ -111,3 +110,5 @@ while running:
 
 # 캔버스 닫기
 close_canvas()
+
+# Done
