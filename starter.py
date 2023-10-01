@@ -29,13 +29,16 @@ def handle_events():
 # 전역변수 선언 및 초기화
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
+character_speed = 2
 hand_x = []
 hand_y = []
-line_x = [n for n in range(21)]
-line_y = [n for n in range(21)]
+line_x = [n for n in range(100//character_speed + 1)]
+line_y = [n for n in range(100//character_speed + 1)]
 line_x_index = 0
 line_y_index = 0
+character_dir = 1
 frame = 0
+character_frame = 0
 
 # 커서 숨기기
 # hide_cursor()
@@ -57,7 +60,7 @@ def reset_line():
         return -1
     index_x = 0
     index_y = 0
-    for i in range(0, 100 + 1, 5):
+    for i in range(0, 100 + 1, character_speed):
         t = i / 100
         line_x[index_x] = int((1 - t) * x + t * hand_x[0])
         line_y[index_y] = int((1 - t) * y + t * hand_y[0])
@@ -91,14 +94,15 @@ while running:
         if (hand_x[0] == x) & (hand_y[0] == y): # 첫 손에 도달했을 경우
             reset_hand()
             reset_line()
-        else:
+        else: # 아직 도달하지 못했을 경우
             reset_character()
 
-    character.clip_draw(frame * 100, 100 * 1, 100, 100, x, TUK_HEIGHT - y)
+    character.clip_draw(character_frame * 100, 100 * character_dir, 100, 100, x, TUK_HEIGHT - y)
 
     update_canvas()
-    frame = (frame + 1) % 8
-    delay(0.05)
+    frame = (frame + 1) % 79
+    character_frame = frame // 10
+    delay(0.01)
 
 # 캔버스 닫기
 close_canvas()
