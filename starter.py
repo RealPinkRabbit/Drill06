@@ -18,23 +18,35 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             running = False
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            hand_x.append(event.x)
+            hand_y.append(event.y)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
 
 # 전역변수 선언 및 초기화
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
+hand_x = []
+hand_y = []
 frame = 0
 
 # 커서 숨기기
-hide_cursor()
+# hide_cursor()
 
 # 메인함수
 while running:
     clear_canvas()
     handle_events()
+
     TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
+    if (len(hand_x) == 0):
+        pass
+    else:
+        for i in range(0, len(hand_x)):
+            hand_arrow.draw(hand_x[i], TUK_HEIGHT - hand_y[i])
     character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+
     update_canvas()
     frame = (frame + 1) % 8
     delay(0.05)
