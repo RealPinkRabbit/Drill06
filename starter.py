@@ -13,11 +13,13 @@ hand_arrow = load_image('hand_arrow.png')
 
 # 키보드 입력 감지 함수
 def handle_events():
-    global running
+    global running, cursor_x, cursor_y
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
+        elif event.type == SDL_MOUSEMOTION:
+            cursor_x, cursor_y = event.x, TUK_HEIGHT-1-event.y
         elif event.type == SDL_MOUSEBUTTONDOWN:
             hand_x.append(event.x)
             hand_y.append(event.y)
@@ -30,6 +32,8 @@ def handle_events():
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 character_speed = 2
+cursor_x = TUK_WIDTH // 2
+cursor_y = TUK_HEIGHT // 2
 hand_x = []
 hand_y = []
 line_x = [n for n in range(100//character_speed + 1)]
@@ -41,7 +45,7 @@ frame = 0
 character_frame = 0
 
 # 커서 숨기기
-# hide_cursor()
+hide_cursor()
 
 # 캐릭터가 도달한 손을 지우는 함수
 def reset_hand():
@@ -90,18 +94,19 @@ while running:
         pass
     else:
         for i in range(0, len(hand_x)): # 누적된 손 모두 그리기
-            hand_arrow.draw(hand_x[i], TUK_HEIGHT - hand_y[i])
+            hand_arrow.draw(hand_x[i], TUK_HEIGHT - 1 - hand_y[i])
         if (hand_x[0] == x) & (hand_y[0] == y): # 첫 손에 도달했을 경우
             reset_hand()
             reset_line()
         else: # 아직 도달하지 못했을 경우
             reset_character()
 
-    character.clip_draw(character_frame * 100, 100 * character_dir, 100, 100, x, TUK_HEIGHT - y)
+    character.clip_draw(character_frame * 100, 100 * character_dir, 100, 100, x, TUK_HEIGHT - 1 - y)
+    hand_arrow.draw(cursor_x, cursor_y)
 
     update_canvas()
-    frame = (frame + 1) % 79
-    character_frame = frame // 10
+    frame = (frame + 1) % 39
+    character_frame = frame // 5
     delay(0.01)
 
 # 캔버스 닫기
