@@ -34,6 +34,16 @@ frame = 0
 # 커서 숨기기
 # hide_cursor()
 
+# 캐릭터가 도달한 손을 지우는 함수
+def reset_hand():
+    pass
+
+def reset_line():
+    pass
+
+def reset_character():
+    pass
+
 # 메인함수
 while running:
     clear_canvas()
@@ -43,8 +53,15 @@ while running:
     if (len(hand_x) == 0):
         pass
     else:
-        for i in range(0, len(hand_x)):
+        for i in range(0, len(hand_x)): # 누적된 손 모두 그리기
             hand_arrow.draw(hand_x[i], TUK_HEIGHT - hand_y[i])
+        if (hand_x[0] == x) & (hand_y[0] == y): # 첫 손에 도달했을 경우
+            reset_hand()
+            reset_line()
+            reset_character()
+        else:
+            reset_character()
+
     character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
 
     update_canvas()
